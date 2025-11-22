@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { mockApi } from "@/services/mockApi";
 import DashboardLayout from "@/components/DashboardLayout";
 
 const formSchema = z.object({
@@ -35,15 +35,11 @@ const Field = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const { error } = await supabase
-        .from("field_records")
-        .insert([{
-          customer_issue: values.customer_issue,
-          solution_given: values.solution_given,
-          technician_name: values.technician_name,
-        }]);
-
-      if (error) throw error;
+      await mockApi.field.create({
+        customer_issue: values.customer_issue,
+        solution_given: values.solution_given,
+        technician_name: values.technician_name,
+      });
 
       toast.success("Field service record submitted successfully!");
       form.reset();
