@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { mockApi } from "@/services/mockApi";
 import DashboardLayout from "@/components/DashboardLayout";
 
 const formSchema = z.object({
@@ -45,17 +45,13 @@ const Sales = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const { error } = await supabase
-        .from("sales_records")
-        .insert([{
-          order_id: values.order_id,
-          customer_name: values.customer_name,
-          quantity: values.quantity,
-          dispatch_date: values.dispatch_date,
-          payment_status: values.payment_status,
-        }]);
-
-      if (error) throw error;
+      await mockApi.sales.create({
+        order_id: values.order_id,
+        customer_name: values.customer_name,
+        quantity: values.quantity,
+        dispatch_date: values.dispatch_date,
+        payment_status: values.payment_status,
+      });
 
       toast.success("Sales record submitted successfully!");
       form.reset();

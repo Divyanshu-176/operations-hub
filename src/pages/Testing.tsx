@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { mockApi } from "@/services/mockApi";
 import DashboardLayout from "@/components/DashboardLayout";
 
 const formSchema = z.object({
@@ -36,16 +36,12 @@ const Testing = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const { error } = await supabase
-        .from("testing_records")
-        .insert([{
-          batch_id: values.batch_id,
-          passed: values.passed,
-          failed: values.failed,
-          defect_type: values.defect_type,
-        }]);
-
-      if (error) throw error;
+      await mockApi.testing.create({
+        batch_id: values.batch_id,
+        passed: values.passed,
+        failed: values.failed,
+        defect_type: values.defect_type,
+      });
 
       toast.success("Testing record submitted successfully!");
       form.reset();

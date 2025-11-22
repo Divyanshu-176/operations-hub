@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { mockApi } from "@/services/mockApi";
 import DashboardLayout from "@/components/DashboardLayout";
 
 const formSchema = z.object({
@@ -43,16 +43,12 @@ const Manufacturing = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const { error } = await supabase
-        .from("manufacturing_records")
-        .insert([{
-          production_count: values.production_count,
-          scrap_count: values.scrap_count,
-          shift: values.shift,
-          machine_id: values.machine_id,
-        }]);
-
-      if (error) throw error;
+      await mockApi.manufacturing.create({
+        production_count: values.production_count,
+        scrap_count: values.scrap_count,
+        shift: values.shift,
+        machine_id: values.machine_id,
+      });
 
       toast.success("Manufacturing record submitted successfully!");
       form.reset();
