@@ -1,4 +1,4 @@
-import { Factory, FlaskConical, Wrench, ShoppingCart } from "lucide-react";
+import { Factory, FlaskConical, Wrench, ShoppingCart, LayoutDashboard } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 
 const items = [
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Manufacturing", url: "/manufacturing", icon: Factory },
   { title: "Testing", url: "/testing", icon: FlaskConical },
   { title: "Field Service", url: "/field", icon: Wrench },

@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { mockApi } from "@/services/mockApi";
+import { api } from "@/services/api";
 import DashboardLayout from "@/components/DashboardLayout";
 
 const formSchema = z.object({
@@ -35,7 +35,7 @@ const Field = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await mockApi.field.create({
+      await api.field.create({
         customer_issue: values.customer_issue,
         solution_given: values.solution_given,
         technician_name: values.technician_name,

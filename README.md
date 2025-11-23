@@ -1,73 +1,179 @@
-# Welcome to your Lovable project
+# Operations Hub
 
-## Project info
+Operations management system with PostgreSQL database integration for Manufacturing, Testing, Field Service, and Sales data entry.
 
-**URL**: https://lovable.dev/projects/cef0023d-3df6-4935-b1d6-9af6a3b4d3fc
+## Architecture
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/cef0023d-3df6-4935-b1d6-9af6a3b4d3fc) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+Frontend (React) → Backend API (Express) → PostgreSQL (Neon.tech) → PowerBI/Zoho → Dashboard
 ```
 
-**Edit a file directly in GitHub**
+## Quick Start
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 1. Install Dependencies
 
-**Use GitHub Codespaces**
+```bash
+# Install frontend dependencies
+npm install
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Install backend dependencies
+cd server
+npm install
+cd ..
+```
 
-## What technologies are used for this project?
+Or use the combined command:
+```bash
+npm run setup:all
+```
 
-This project is built with:
+### 2. Set Up Database
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+1. Go to **Neon.tech Dashboard** → **SQL Editor**
+2. Open `database/schema.sql` in your project
+3. **Copy ALL the SQL code**
+4. **Paste** into Neon.tech SQL Editor
+5. Click **"Run"** to execute
 
-## How can I deploy this project?
+This creates 4 tables:
+- `manufacturing_records`
+- `testing_records`
+- `field_records`
+- `sales_records`
 
-Simply open [Lovable](https://lovable.dev/projects/cef0023d-3df6-4935-b1d6-9af6a3b4d3fc) and click on Share -> Publish.
+### 3. Run the Application
 
-## Can I connect a custom domain to my Lovable project?
+**Option A: Double-click `START.bat`** (Windows - Easiest)
 
-Yes, you can!
+**Option B: Command Line**
+```bash
+npm run dev:all
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+This starts:
+- Backend server on http://localhost:3001
+- Frontend on http://localhost:8080
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### 4. Access the Application
+
+Open your browser: **http://localhost:8080**
+
+## Project Structure
+
+```
+operations-hub/
+├── server/                 # Backend API (Express + PostgreSQL)
+│   ├── index.js           # API server
+│   ├── package.json       # Backend dependencies
+│   └── .env              # Database config (auto-created)
+├── database/
+│   └── schema.sql        # Run this in Neon.tech
+├── src/
+│   ├── pages/            # Form pages (Manufacturing, Testing, Field, Sales)
+│   ├── services/
+│   │   └── api.ts        # Frontend API client
+│   └── ...
+├── START.bat             # Double-click to start (Windows)
+└── package.json          # Frontend dependencies
+```
+
+## API Endpoints
+
+### Manufacturing
+- `POST /api/manufacturing` - Create manufacturing record
+- `GET /api/manufacturing` - Get all records
+
+### Testing
+- `POST /api/testing` - Create testing record
+- `GET /api/testing` - Get all records
+
+### Field Service
+- `POST /api/field` - Create field service record
+- `GET /api/field` - Get all records
+
+### Sales
+- `POST /api/sales` - Create sales record
+- `GET /api/sales` - Get all records
+
+### Health Check
+- `GET /health` - Check server and database status
+
+## Connect PowerBI or Zoho
+
+### For PowerBI:
+
+1. Open **PowerBI Desktop**
+2. **Get Data** → **Database** → **PostgreSQL database**
+3. Enter connection details:
+   - Server: `ep-shy-morning-ah5kbj54-pooler.c-3.us-east-1.aws.neon.tech`
+   - Database: `neondb`
+   - Username: `neondb_owner`
+   - Password: `npg_dum31zConSsh`
+4. Select the 4 tables
+5. Create dashboards
+6. Publish to PowerBI Service
+7. Get embed URL
+8. Add to `src/pages/Dashboard.tsx`:
+   ```tsx
+   <iframe 
+     src="YOUR_POWERBI_EMBED_URL" 
+     className="w-full h-screen border-0"
+     title="Dashboard"
+   />
+   ```
+
+### For Zoho Analytics:
+
+1. Go to **Zoho Analytics**
+2. Create **Data Source** → **PostgreSQL**
+3. Enter same connection details as above
+4. Import tables and create dashboards
+5. Get embed code and add to `src/pages/Dashboard.tsx`
+
+## Troubleshooting
+
+### "Cannot find module" errors
+```bash
+npm install
+cd server && npm install
+```
+
+### "DATABASE_URL is not set"
+The `.env` file auto-creates on first run. If you see this error, check `server/.env` exists.
+
+### "relation does not exist" (database tables)
+**You must run the SQL schema in Neon.tech!**
+1. Open `database/schema.sql`
+2. Copy all SQL
+3. Paste in Neon.tech SQL Editor
+4. Run it
+
+### Port already in use
+Change port in `server/.env`:
+```env
+PORT=3002
+```
+
+### Database connection fails
+- Verify connection string in `server/.env`
+- Check Neon.tech database is running
+- Ensure SQL schema was executed
+
+## Scripts
+
+- `npm run dev` - Start frontend only
+- `npm run dev:server` - Start backend only
+- `npm run dev:all` - Start both frontend and backend
+- `npm run setup:all` - Install all dependencies
+- `npm run build` - Build for production
+
+## Technologies
+
+- **Frontend:** React, TypeScript, Vite, shadcn-ui, Tailwind CSS
+- **Backend:** Express.js, Node.js
+- **Database:** PostgreSQL (Neon.tech)
+- **Visualization:** PowerBI or Zoho Analytics
+
+## License
+
+Private project

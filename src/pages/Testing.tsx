@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { mockApi } from "@/services/mockApi";
+import { api } from "@/services/api";
 import DashboardLayout from "@/components/DashboardLayout";
 
 const formSchema = z.object({
@@ -36,7 +36,7 @@ const Testing = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await mockApi.testing.create({
+      await api.testing.create({
         batch_id: values.batch_id,
         passed: values.passed,
         failed: values.failed,

@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { mockApi } from "@/services/mockApi";
+import { api } from "@/services/api";
 import DashboardLayout from "@/components/DashboardLayout";
 
 const formSchema = z.object({
@@ -43,7 +43,7 @@ const Manufacturing = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await mockApi.manufacturing.create({
+      await api.manufacturing.create({
         production_count: values.production_count,
         scrap_count: values.scrap_count,
         shift: values.shift,

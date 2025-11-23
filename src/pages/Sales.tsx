@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { mockApi } from "@/services/mockApi";
+import { api } from "@/services/api";
 import DashboardLayout from "@/components/DashboardLayout";
 
 const formSchema = z.object({
@@ -45,7 +45,7 @@ const Sales = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await mockApi.sales.create({
+      await api.sales.create({
         order_id: values.order_id,
         customer_name: values.customer_name,
         quantity: values.quantity,
