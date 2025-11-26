@@ -236,10 +236,8 @@ app.get('/api/sales', async (req, res) => {
   }
 });
 
-// Initialize Gemini client (uses GEMINI_API_KEY from environment)
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
+// Initialize Gemini client (uses GEMINI_API_KEY from environment variable)
+const ai = new GoogleGenAI({});
 
 // Chat with Gemini + database context
 app.post('/api/chat', async (req, res) => {
@@ -276,17 +274,21 @@ app.post('/api/chat', async (req, res) => {
       "\n\nUser question:\n" +
       message;
 
-    const geminiResponse = await ai.models.generateContent({
+    const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
     });
 
-    const answer = geminiResponse.text || 'No answer generated.';
+    const answer = response.text || 'No answer generated.';
 
     res.json({ answer });
   } catch (error) {
     console.error('Error in /api/chat:', error);
-    res.status(500).json({ error: 'Failed to generate chat response' });
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ 
+      error: 'Failed to generate chat response',
+      details: error.message || 'Unknown error'
+    });
   }
 });
 
