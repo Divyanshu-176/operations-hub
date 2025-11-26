@@ -19,11 +19,12 @@ const items = [
   { title: "Manufacturing Dashboard", url: "/dashboard/manufacturing", icon: Factory },
   { title: "Testing Dashboard", url: "/dashboard/testing", icon: FlaskConical },
   { title: "Sales Dashboard", url: "/dashboard/sales", icon: ShoppingCart },
-  { title: "Recent Records", url: "/recent", icon: Clock },
   { title: "Field Service Form", url: "/field", icon: Wrench },
   { title: "Manufacturing Form", url: "/manufacturing", icon: Factory },
   { title: "Testing Form", url: "/testing", icon: FlaskConical },
   { title: "Sales Form", url: "/sales", icon: ShoppingCart },
+  { title: "Recent Records", url: "/recent", icon: Clock }
+
 ];
 
 export function AppSidebar() {
