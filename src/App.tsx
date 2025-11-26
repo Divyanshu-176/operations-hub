@@ -13,6 +13,7 @@ import DashboardManufacturing from "./pages/DashboardManufacturing";
 import DashboardTesting from "./pages/DashboardTesting";
 import DashboardSales from "./pages/DashboardSales";
 import Chat from "./pages/Chat";
+import Recent from "./pages/Recent";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/dashboard/testing" element={<DashboardTesting />} />
           <Route path="/dashboard/sales" element={<DashboardSales />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/recent" element={<Recent />} />
           <Route path="/manufacturing" element={<Manufacturing />} />
           <Route path="/testing" element={<Testing />} />
           <Route path="/field" element={<Field />} />

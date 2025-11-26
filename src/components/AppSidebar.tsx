@@ -1,4 +1,4 @@
-import { Factory, FlaskConical, Wrench, ShoppingCart, LayoutDashboard, MessageCircle } from "lucide-react";
+import { Factory, FlaskConical, Wrench, ShoppingCart, LayoutDashboard, MessageCircle, Clock } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 
@@ -19,6 +19,7 @@ const items = [
   { title: "Manufacturing Dashboard", url: "/dashboard/manufacturing", icon: Factory },
   { title: "Testing Dashboard", url: "/dashboard/testing", icon: FlaskConical },
   { title: "Sales Dashboard", url: "/dashboard/sales", icon: ShoppingCart },
+  { title: "Recent Records", url: "/recent", icon: Clock },
   { title: "Field Service Form", url: "/field", icon: Wrench },
   { title: "Manufacturing Form", url: "/manufacturing", icon: Factory },
   { title: "Testing Form", url: "/testing", icon: FlaskConical },
