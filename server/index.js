@@ -3,6 +3,7 @@ const cors = require('cors');
 const { Pool } = require('pg');
 const path = require('path');
 const fs = require('fs');
+const { GoogleGenAI } = require('@google/genai');
 
 // Load environment variables
 require('dotenv').config();
@@ -19,6 +20,9 @@ PORT=3001
 
 # Frontend URL (for CORS)
 FRONTEND_URL=http://localhost:8080
+
+# Gemini API
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY_HERE
 `;
   fs.writeFileSync(envPath, envTemplate);
   console.log('✅ Created .env file with default values');
@@ -229,6 +233,60 @@ app.get('/api/sales', async (req, res) => {
   } catch (error) {
     console.error('Error fetching sales records:', error);
     res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Initialize Gemini client (uses GEMINI_API_KEY from environment)
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
+
+// Chat with Gemini + database context
+app.post('/api/chat', async (req, res) => {
+  try {
+    const { message } = req.body;
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({ error: 'Message is required' });
+    }
+
+    if (!process.env.GEMINI_API_KEY) {
+      return res.status(500).json({ error: 'GEMINI_API_KEY is not set in server/.env' });
+    }
+
+    // Fetch recent data from each table (small samples to keep prompt size manageable)
+    const [manufacturing, testing, field, sales] = await Promise.all([
+      pool.query('SELECT * FROM manufacturing_records ORDER BY created_at DESC LIMIT 30'),
+      pool.query('SELECT * FROM testing_records ORDER BY created_at DESC LIMIT 30'),
+      pool.query('SELECT * FROM field_records ORDER BY created_at DESC LIMIT 30'),
+      pool.query('SELECT * FROM sales_records ORDER BY created_at DESC LIMIT 30'),
+    ]);
+
+    const context = {
+      manufacturing_records: manufacturing.rows,
+      testing_records: testing.rows,
+      field_records: field.rows,
+      sales_records: sales.rows,
+    };
+
+    const prompt =
+      "You are an operations assistant. Answer questions using ONLY the data provided from these PostgreSQL tables: " +
+      "manufacturing_records, testing_records, field_records, sales_records.\n\n" +
+      "Here is the latest data in JSON format:\n" +
+      JSON.stringify(context, null, 2) +
+      "\n\nUser question:\n" +
+      message;
+
+    const geminiResponse = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+    });
+
+    const answer = geminiResponse.text || 'No answer generated.';
+
+    res.json({ answer });
+  } catch (error) {
+    console.error('Error in /api/chat:', error);
+    res.status(500).json({ error: 'Failed to generate chat response' });
   }
 });
 

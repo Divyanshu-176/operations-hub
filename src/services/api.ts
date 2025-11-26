@@ -118,6 +118,23 @@ export const api = {
       return response.json();
     },
   },
+
+  chat: {
+    sendMessage: async (message: string) => {
+      const response = await fetch(`${API_BASE_URL}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ error: 'Failed to get chat response' }));
+        throw new Error(error.error || 'Failed to get chat response');
+      }
+
+      return response.json();
+    },
+  },
 };
 
 
