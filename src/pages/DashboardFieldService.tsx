@@ -23,7 +23,7 @@ interface FieldRecord {
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
 const DashboardFieldService = () => {
-  const [dateRange, setDateRange] = useState(30);
+  const [dateRange, setDateRange] = useState(365);
   const [selectedTechnician, setSelectedTechnician] = useState<string>("all");
 
   const { data: allData, isLoading, refetch, isRefetching } = useQuery({
