@@ -25,7 +25,7 @@ interface SalesRecord {
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
 const DashboardSales = () => {
-  const [dateRange, setDateRange] = useState(30);
+  const [dateRange, setDateRange] = useState(365);
   const [selectedPaymentStatus, setSelectedPaymentStatus] = useState<string>("all");
   const [selectedCustomer, setSelectedCustomer] = useState<string>("all");
 
