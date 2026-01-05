@@ -24,7 +24,7 @@ interface TestingRecord {
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658'];
 
 const DashboardTesting = () => {
-  const [dateRange, setDateRange] = useState(30);
+  const [dateRange, setDateRange] = useState(365);
   const [selectedDefectType, setSelectedDefectType] = useState<string>("all");
 
   const { data: allData, isLoading, refetch, isRefetching } = useQuery({
