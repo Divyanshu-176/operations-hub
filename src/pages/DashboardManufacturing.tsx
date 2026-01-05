@@ -24,7 +24,7 @@ interface ManufacturingRecord {
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
 const DashboardManufacturing = () => {
-  const [dateRange, setDateRange] = useState(30); // days
+  const [dateRange, setDateRange] = useState(365); // days
   const [selectedShift, setSelectedShift] = useState<string>("all");
   const [selectedMachine, setSelectedMachine] = useState<string>("all");
 
